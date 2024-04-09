@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { checkIsLiked } from '@/lib/utils';
@@ -12,22 +12,29 @@ type PostStatsProps = {
 
 const PostStats = ({ post, userId }: PostStatsProps) => {
     const location = useLocation();
-    const likesList = post.likes ? post.likes.map((userId) => userId) : [];
-    const [likes, setLikes] = useState<string[]>(likesList);
+    const likesList = post.likes || {}; // Kiểm tra nếu likesList là null hoặc undefined, thì gán nó bằng một object rỗng
+    const initialLikes = Array.isArray(likesList) ? likesList : Object.keys(likesList); // Kiểm tra nếu likesList là mảng, thì giữ nguyên, ngược lại chuyển đổi thành mảng
+    const [likes, setLikes] = useState<string[]>(initialLikes);
     const [isSaved, setIsSaved] = useState(false);
+
+    useEffect(() => {
+        // Cập nhật likes khi post thay đổi
+        const initialLikes = Array.isArray(likesList) ? likesList : Object.keys(likesList);
+        setLikes(initialLikes);
+    }, [post.likes]);
 
     const handleLikePost = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
         e.stopPropagation();
 
-        let likesArray = [...likes];
+        let updatedLikes = [...likes];
 
-        if (likesArray.includes(userId)) {
-            likesArray = likesArray.filter((Id) => Id !== userId);
+        if (checkIsLiked(updatedLikes, userId)) {
+            updatedLikes = updatedLikes.filter((likeId) => likeId !== userId);
         } else {
-            likesArray.push(userId);
+            updatedLikes.push(userId);
         }
 
-        setLikes(likesArray);
+        setLikes(updatedLikes);
     };
 
     const handleSavePost = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {

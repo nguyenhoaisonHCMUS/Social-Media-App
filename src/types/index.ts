@@ -1,18 +1,19 @@
 export type User = {
-    id: string;
+    _id: string;
     name: string;
     username: string;
     email: string;
-    password: string;
     imgUrl: string;
 };
 
 export type PostCardProps = {
+    _id: string;
     caption: string;
-    tags: string[];
+    tags: string;
     imgUrl: string;
     location: string;
-    id: string;
+    cre_at: Date;
     creator: User;
     likes: string[];
 };
+export type POSTS = [PostCardProps];

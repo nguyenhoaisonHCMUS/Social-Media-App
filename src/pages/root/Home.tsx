@@ -1,87 +1,65 @@
 import { Loader, PostCard, UserCard } from '@/components/shared';
-import { User, PostCardProps } from '../../types/index';
-
-const posts: PostCardProps[] = [
-    {
-        caption: 'Casper, Lindgren and Bailey',
-        tags: ['tag1', 'tag2'],
-        imgUrl: 'https://loremflickr.com/640/480',
-        location: 'en_US',
-        id: '1',
-        creator: {
-            name: 'Lucia Murray III',
-            username: 'Minnie_Zieme',
-            email: 'Herminio76@yahoo.com',
-            password: 'x5rSIg1xDg5sgvh',
-            imgUrl: 'https://loremflickr.com/640/480',
-            id: '2',
-        },
-        likes: ['1', '2', '4'],
-    },
-    {
-        caption: 'Miller - Pouros',
-        tags: ['tag1', 'tag2'],
-        imgUrl: 'https://loremflickr.com/640/480',
-        location: 'ko',
-        id: '2',
-        creator: {
-            name: 'Randall Parisian',
-            username: 'Lawson_Gleichner66',
-            email: 'Thelma6@gmail.com',
-            password: 'dgsYrL3f3M3mc_E',
-            imgUrl: 'https://loremflickr.com/640/480',
-            id: '1',
-        },
-        likes: ['helo', 'name'],
-    },
-];
+import { POSTS, User } from '../../types/index';
+import { useEffect, useState } from 'react';
+import { getAll } from '@/service/PostService';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { INIT_STATE_POST } from '@/types/initValueType';
 
 const creators: User[] = [
     {
+        _id: '1',
         name: 'Randall Parisian',
         username: 'Lawson_Gleichner66',
         email: 'Thelma6@gmail.com',
-        password: 'dgsYrL3f3M3mc_E',
         imgUrl: 'https://loremflickr.com/640/480',
-        id: '1',
     },
     {
+        _id: '2',
         name: 'Lucia Murray III',
         username: 'Minnie_Zieme',
         email: 'Herminio76@yahoo.com',
-        password: 'x5rSIg1xDg5sgvh',
         imgUrl: 'https://loremflickr.com/640/480',
-        id: '2',
     },
     {
+        _id: '3',
         name: 'Belinda Stark',
         username: 'Dora95',
         email: 'Vladimir_Schimmel@hotmail.com',
-        password: 'L8ubq1YV59YFnPs',
         imgUrl: 'https://loremflickr.com/640/480',
-        id: '3',
     },
     {
+        _id: '4',
         name: 'Al Braun',
         username: 'Nyasia98',
         email: 'Thelma6@gmail.com',
-        password: 'dgsYrL3f3M3mc_E',
         imgUrl: 'https://loremflickr.com/640/480',
-        id: '4',
-    },
-    {
-        name: 'Leroy Hahn',
-        username: 'Marques_Willms',
-        email: 'Destiney.Mueller89@yahoo.com',
-        password: 'fXFYjStuenvNkHt',
-        imgUrl: 'https://loremflickr.com/640/480',
-        id: '5',
     },
 ];
 
 function Home() {
-    const isPostLoading = false;
+    const [isPostLoading, setIsPostLoading] = useState(true);
+    const [posts, setPosts] = useState<POSTS>(INIT_STATE_POST);
     const isUserLoading = false;
+    const user = useSelector((state: RootState) => state.auth.currentUser);
+    // console.log('home: ', user);
+    useEffect(() => {
+        const fetchApi = async () => {
+            const data = await getAll(user.accessToken);
+            if (!data.data) {
+                return (
+                    <>
+                        <Loader />
+                    </>
+                );
+            }
+            setPosts(data.data);
+        };
+        setIsPostLoading(true);
+        fetchApi();
+        setIsPostLoading(false);
+    }, [user.accessToken]);
+
     return (
         <div className="flex flex-1">
             <div className="home-container">
@@ -91,8 +69,8 @@ function Home() {
                         <Loader />
                     ) : (
                         <ul className="flex flex-col flex-1 gap-9 w-full ">
-                            {posts.map((post) => (
-                                <li key={post.id} className="flex justify-center w-full">
+                            {posts.map((post, index) => (
+                                <li key={index} className="flex justify-center w-full">
                                     <PostCard post={post} />
                                 </li>
                             ))}
@@ -107,8 +85,8 @@ function Home() {
                     <Loader />
                 ) : (
                     <ul className="grid 2xl:grid-cols-2 gap-6">
-                        {creators.map((creator) => (
-                            <li key={creator.id}>
+                        {creators.map((creator, index) => (
+                            <li key={index}>
                                 <UserCard user={creator} />
                             </li>
                         ))}

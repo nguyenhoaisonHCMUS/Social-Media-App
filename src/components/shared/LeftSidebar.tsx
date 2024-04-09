@@ -4,42 +4,43 @@ import { Loader } from '.';
 import { Button } from '../ui/button';
 import imgs from '@/assets/images';
 import { icons } from '@/assets/icons';
+import { User } from '@/types';
+import { useDispatch } from 'react-redux';
+import { logout } from '@/redux/AuthSlice';
 
-const user = {
-    name: 'Randall Parisian',
-    username: 'Lawson_Gleichner66',
-    email: 'Thelma6@gmail.com',
-    password: 'dgsYrL3f3M3mc_E',
-    imgUrl: 'https://loremflickr.com/640/480',
-    id: '1',
-};
-
-function LeftSidebar() {
+function LeftSidebar({ userData }: { userData: User }) {
     const isLoading = false;
-    // const navigate = useNavigate();
-    const { pathname } = useLocation();
+    const location = useLocation();
+    const { pathname } = location;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/sign-in');
+    };
 
     return (
-        <nav className=" leftsidebar">
+        <nav className=" leftsidebar sticky top-0 z-10">
             <div className="flex flex-col gap-11">
                 <Link to="/" className="flex gap-3 items-center">
                     <img src={imgs.logo} alt="logo" width={170} height={36} />
                 </Link>
 
-                {isLoading || !user.email ? (
+                {isLoading || !userData.email ? (
                     <div className="h-14">
                         <Loader />
                     </div>
                 ) : (
-                    <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
+                    <Link to={`/profile/${userData._id}`} className="flex gap-3 items-center">
                         <img
-                            src={user.imgUrl || icons.profile_placeholder}
+                            src={userData.imgUrl || icons.profile_placeholder}
                             alt="profile"
                             className="h-14 w-14 rounded-full"
                         />
                         <div className="flex flex-col">
-                            <p className="body-bold">{user.name}</p>
-                            <p className="small-regular text-light-3">@{user.username}</p>
+                            <p className="body-bold">{userData.name}</p>
+                            <p className="small-regular text-light-3">@{userData.username}</p>
                         </div>
                     </Link>
                 )}
@@ -64,7 +65,7 @@ function LeftSidebar() {
                 </ul>
             </div>
 
-            <Button variant="ghost" className="shad-button_ghost">
+            <Button variant="ghost" className="shad-button_ghost" onClick={handleLogout}>
                 <img src={icons.logout} alt="logout" />
                 <p className="small-medium lg:base-medium">Logout</p>
             </Button>

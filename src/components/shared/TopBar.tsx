@@ -2,19 +2,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import imgs from '@/assets/images';
 import { icons } from '@/assets/icons';
+import { User } from '@/types';
+import { useDispatch } from 'react-redux';
+import { logout } from '@/redux/AuthSlice';
 
-const user = {
-    name: 'Randall Parisian',
-    username: 'Lawson_Gleichner66',
-    email: 'Thelma6@gmail.com',
-    password: 'dgsYrL3f3M3mc_E',
-    imgUrl: 'https://loremflickr.com/640/480',
-    id: '1',
-};
-
-const Topbar = () => {
+const Topbar = ({ userData }: { userData: User }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/sign-in');
+    };
     return (
         <section className="topbar">
             <div className="flex-between py-4 px-5">
@@ -23,12 +22,12 @@ const Topbar = () => {
                 </Link>
 
                 <div className="flex gap-4">
-                    <Button variant="ghost" className="shad-button_ghost" onClick={(e) => e.preventDefault()}>
+                    <Button variant="ghost" className="shad-button_ghost" onClick={handleLogout}>
                         <img src={icons.logout} alt="logout" />
                     </Button>
-                    <Link to={`/profile/${user.id}`} className="flex-center gap-3">
+                    <Link to={`/profile/${userData._id}`} className="flex-center gap-3">
                         <img
-                            src={user.imgUrl || icons.profile_placeholder}
+                            src={userData.imgUrl || icons.profile_placeholder}
                             alt="profile"
                             className="h-8 w-8 rounded-full"
                         />

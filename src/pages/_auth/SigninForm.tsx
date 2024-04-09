@@ -7,14 +7,16 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/shared';
-// import { useToast } from '@/components/ui/use-toast';
 import { signinValid } from '@/lib/validation';
 import imgs from '@/assets/images';
 import { loginApi } from '@/service/UserService';
 import { toast } from '@/components/ui/use-toast';
+import { loginSuccess, loginFailed } from '@/redux/AuthSlice';
+import { useDispatch } from 'react-redux';
 
 function SigninForm() {
     const isLoading = false;
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const form = useForm<z.infer<typeof signinValid>>({
@@ -25,19 +27,19 @@ function SigninForm() {
         },
     });
     const onSubmit = async (values: z.infer<typeof signinValid>) => {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-
         try {
             const res = await loginApi(values.email, values.password);
-            if (res) {
-                // Lưu token vào localStorage
-                // localStorage.setItem('tokenLogin', res.token);
-                navigate('/');
+            console.log('res', res);
+            if (!res.user) {
+                dispatch(loginFailed());
+                toast({ title: 'login failed ' + res.message });
+                return;
             } else {
-                toast({ title: 'login failed. Please check your Email or Password.' });
+                dispatch(loginSuccess(res));
+                navigate('/');
             }
         } catch (error) {
+            dispatch(loginFailed());
             toast({ title: 'login failed. It seems like an error is occurring.' });
         }
     };

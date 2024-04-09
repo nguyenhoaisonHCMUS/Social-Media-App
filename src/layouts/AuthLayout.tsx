@@ -1,11 +1,14 @@
 import imgs from '@/assets/images';
+import { RootState } from '@/redux/store';
+import { useSelector } from 'react-redux';
 import { Outlet, Navigate } from 'react-router-dom';
 
 function AuthLayout() {
-    const isAuthenticated = false;
+    const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+
     return (
         <>
-            {isAuthenticated ? (
+            {isLoggedIn ? (
                 <Navigate to="/" />
             ) : (
                 <section className="flex">
