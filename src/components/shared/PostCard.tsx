@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { PostStats } from '@/components/shared';
+import { Loader, PostStats } from '@/components/shared';
 import { multiFormatDateString } from '@/lib/utils';
 import { icons } from '@/assets/icons';
 import { PostCardProps } from '@/types';
@@ -9,8 +9,7 @@ import { RootState } from '@/redux/store';
 const PostCard = ({ post }: { post: PostCardProps }) => {
     const user = useSelector((state: RootState) => state.auth.currentUser);
     const currentUser = user.user;
-    if (!post.creator) return null;
-    console.log(currentUser._id === post.creator._id);
+    if (post._id === '') return <Loader />;
 
     return (
         <div className="post-card">
@@ -30,7 +29,7 @@ const PostCard = ({ post }: { post: PostCardProps }) => {
                             <p className="subtle-semibold lg:small-regular ">
                                 {multiFormatDateString(post.cre_at?.toString())}
                             </p>
-                            •<p className="subtle-semibold lg:small-regular">{post.location}</p>
+                            <p className="subtle-semibold lg:small-regular">{post.location}</p>
                         </div>
                     </div>
                 </div>

@@ -42,3 +42,19 @@ export const countPostOfNumberApi = async (creator: string, accessToken: string)
         return { message: error };
     }
 };
+
+export const GetPostOfCaption = async (caption: string, accessToken: string) => {
+    try {
+        const response = await axios.get('http://localhost:5000/api/search-post', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            params: {
+                caption,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return { message: error };
+    }
+};

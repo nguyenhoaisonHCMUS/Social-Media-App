@@ -1,4 +1,4 @@
-import { User, PostCardProps, POSTS } from '.';
+import { User, PostCardProps, POSTS, USERS } from '.';
 
 export const INIT_USER: User = {
     _id: '',
@@ -22,5 +22,7 @@ export const INIT_POST_CARD: PostCardProps = {
         imgUrl: '',
     },
     likes: [],
+    saveds: [],
 };
 export const INIT_STATE_POST: POSTS = [INIT_POST_CARD];
+export const INIT_STATE_USER: USERS = [INIT_USER];

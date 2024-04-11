@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { useInView } from 'react-intersection-observer';
 
 import { Input } from '@/components/ui/input';
 import useDebounce from '../../hook/useDebounce';
 import { GridPostList, Loader } from '@/components/shared';
 import { icons } from '@/assets/icons';
-import { POSTS, PostCardProps } from '@/types';
-import { INIT_POST_CARD, INIT_STATE_POST } from '@/types/initValueType';
+import { POSTS } from '@/types';
+import { INIT_STATE_POST } from '@/types/initValueType';
+import { GetPostOfCaption, getAll } from '@/service/PostService';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { toast } from '@/components/ui/use-toast';
 
 export type SearchResultProps = {
     isSearchFetching: boolean;
@@ -16,7 +20,7 @@ export type SearchResultProps = {
 const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) => {
     if (isSearchFetching) {
         return <Loader />;
-    } else if (searchedPosts && searchedPosts.length > 0) {
+    } else if (searchedPosts.length > 0) {
         return <GridPostList posts={searchedPosts} />;
     } else {
         return <p className="text-light-4 mt-10 text-center w-full">No results found</p>;
@@ -24,21 +28,48 @@ const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) =
 };
 
 const Explore = () => {
-    // const { ref, inView } = useInView();
-
     const [searchValue, setSearchValue] = useState('');
-    const [searchResult, setSearchResult] = useState<POSTS>(INIT_STATE_POST);
-    const debouncedSearch = useDebounce(searchValue, 500);
+    const [searchResult, setSearchResult] = useState<POSTS | POSTS[]>(INIT_STATE_POST);
+    const debouncedSearch = useDebounce(searchValue, 1000);
+    console.log(searchValue);
+    const userInfo = useSelector((state: RootState) => state.auth.currentUser);
 
-    const shouldShowSearchResults = true;
+    useEffect(() => {
+        if (!debouncedSearch.trim()) {
+            // setSearchResult([]);
+            const fetchDataPostAll = async () => {
+                const res = await getAll(userInfo.accessToken);
+                console.log(res);
+                if (!res || !res.data) {
+                    toast({ title: 'request failed' });
+                    return;
+                }
+                setSearchResult(res.data);
+            };
+            console.log('request');
+            fetchDataPostAll();
+            return;
+        }
+        const fetchDataPost = async () => {
+            const res = await GetPostOfCaption(searchValue, userInfo.accessToken);
+            console.log(res);
+            if (!res || !res.data) {
+                toast({ title: 'request failed' });
+                return;
+            }
+            setSearchResult(res.data);
+        };
+        console.log('request');
+        fetchDataPost();
+    }, [debouncedSearch, userInfo.accessToken]);
 
-    // if (!searchResult) {
-    //     return (
-    //         <div className="flex-center w-full h-full">
-    //             <Loader />
-    //         </div>
-    //     );
-    // }
+    if (!searchResult) {
+        return (
+            <div className="flex-center w-full h-full">
+                <Loader />
+            </div>
+        );
+    }
 
     return (
         <div className="explore-container">
@@ -67,13 +98,11 @@ const Explore = () => {
                 </div>
             </div>
             <div className="flex flex-wrap gap-9 w-full max-w-5xl">
-                {/* {searchValue !== '' ? (
+                {searchValue !== '' && !searchResult ? (
                     <SearchResults isSearchFetching={true} searchedPosts={searchResult} />
-                ) : shouldShowPosts ? (
-                    <p className="text-light-4 mt-10 text-center w-full">End of posts</p>
                 ) : (
-                    posts.map((item, index) => <GridPostList key={`page-${index}`} posts={item} />)
-                )} */}
+                    <GridPostList posts={searchResult} showStats={false} />
+                )}
             </div>
         </div>
     );

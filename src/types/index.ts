@@ -15,5 +15,7 @@ export type PostCardProps = {
     cre_at: Date;
     creator: User;
     likes: string[];
+    saveds: string[];
 };
 export type POSTS = [PostCardProps];
+export type USERS = [User];

@@ -42,7 +42,7 @@ function Home() {
     const [posts, setPosts] = useState<POSTS>(INIT_STATE_POST);
     const isUserLoading = false;
     const user = useSelector((state: RootState) => state.auth.currentUser);
-    // console.log('home: ', user);
+
     useEffect(() => {
         const fetchApi = async () => {
             const data = await getAll(user.accessToken);

@@ -64,6 +64,8 @@ const PostForm: React.FC<PostFormProps> = ({ action }) => {
         formData.append('creator', user.user._id);
         formData.append('image_post', image);
 
+        // console.log(formData);
+
         const res = await createPost(formData, user.accessToken);
         if (!res) {
             toast({ title: 'create Post FAILED!!' });

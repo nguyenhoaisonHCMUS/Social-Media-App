@@ -30,6 +30,7 @@ const Profile = () => {
     const [user, setUser] = useState<User>(INIT_USER);
     const [posts, setPosts] = useState<POSTS>(INIT_STATE_POST);
     const users = useSelector((state: RootState) => state.auth.currentUser);
+    const currentUser = users.user;
 
     useEffect(() => {
         const fetchGetUserApi = async () => {
@@ -50,7 +51,6 @@ const Profile = () => {
                 if (res && res.data) {
                     setPosts(res.data);
                 } else {
-                    console.log('nodata');
                     return;
                 }
             } catch (error) {
@@ -61,13 +61,13 @@ const Profile = () => {
         fetchGetPostNumber();
     }, [user._id, users.accessToken]);
 
-    const currentUser = users.user;
-    if (!currentUser)
+    if (!currentUser) {
         return (
             <div className="flex-center w-full h-full">
                 <Loader />
             </div>
         );
+    }
 
     return (
         <div className="profile-container">
@@ -134,11 +134,7 @@ const Profile = () => {
                 </div>
             </div>
 
-            <Routes>
-                <Route index element={<GridPostList posts={posts} showUser={false} />} />
-                {/* {currentUser._id === user._id && <Route path="/liked-posts" element={<LikedPosts />} />} */}
-            </Routes>
-            <Outlet />
+            <GridPostList posts={posts} showUser={false} />
         </div>
     );
 };

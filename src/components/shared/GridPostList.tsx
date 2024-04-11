@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { PostStats } from '@/components/shared';
+import { Loader, PostStats } from '@/components/shared';
 import { POSTS } from '@/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
@@ -15,6 +15,9 @@ type GridPostListProps = {
 const GridPostList = ({ posts, showUser = true, showStats = true }: GridPostListProps) => {
     const user = useSelector((state: RootState) => state.auth.currentUser.user);
 
+    if (!posts) {
+        return <Loader />;
+    }
     return (
         <ul className="grid-container">
             {posts.map((post) => (
