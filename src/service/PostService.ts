@@ -58,3 +58,19 @@ export const GetPostOfCaption = async (caption: string, accessToken: string) => 
         return { message: error };
     }
 };
+
+export const GetPostOfID = async (postId: string, accessToken: string) => {
+    try {
+        const response = await axios.get('http://localhost:5000/api/search-post-id', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            params: {
+                postId,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return { message: error };
+    }
+};

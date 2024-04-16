@@ -42,6 +42,11 @@ function Home() {
     const [posts, setPosts] = useState<POSTS>(INIT_STATE_POST);
     const isUserLoading = false;
     const user = useSelector((state: RootState) => state.auth.currentUser);
+    const [restart, setRestart] = useState(false);
+
+    const onRestart = () => {
+        setRestart(!restart);
+    };
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -58,7 +63,7 @@ function Home() {
         setIsPostLoading(true);
         fetchApi();
         setIsPostLoading(false);
-    }, [user.accessToken]);
+    }, [user.accessToken, restart]);
 
     return (
         <div className="flex flex-1">
@@ -71,7 +76,7 @@ function Home() {
                         <ul className="flex flex-col flex-1 gap-9 w-full ">
                             {posts.map((post, index) => (
                                 <li key={index} className="flex justify-center w-full">
-                                    <PostCard post={post} />
+                                    <PostCard post={post} onRestart={onRestart} />
                                 </li>
                             ))}
                         </ul>

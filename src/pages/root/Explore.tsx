@@ -31,7 +31,6 @@ const Explore = () => {
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState<POSTS | POSTS[]>(INIT_STATE_POST);
     const debouncedSearch = useDebounce(searchValue, 1000);
-    console.log(searchValue);
     const userInfo = useSelector((state: RootState) => state.auth.currentUser);
 
     useEffect(() => {

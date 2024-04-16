@@ -23,6 +23,7 @@ import saved from './saved.svg';
 import search from './search.svg';
 import share from './share.svg';
 import wallpaper from './wallpaper.svg';
+import comment from './comment.svg';
 
 export const icons = {
     add_post: add_post,
@@ -50,4 +51,5 @@ export const icons = {
     search: search,
     share: share,
     wallpaper: wallpaper,
+    comment: comment,
 };

@@ -10,9 +10,10 @@ type GridPostListProps = {
     posts: POSTS;
     showUser?: boolean;
     showStats?: boolean;
+    onRestart?: () => void;
 };
 
-const GridPostList = ({ posts, showUser = true, showStats = true }: GridPostListProps) => {
+const GridPostList = ({ posts, showUser = true, showStats = true, onRestart }: GridPostListProps) => {
     const user = useSelector((state: RootState) => state.auth.currentUser.user);
 
     if (!posts) {
@@ -22,9 +23,9 @@ const GridPostList = ({ posts, showUser = true, showStats = true }: GridPostList
         <ul className="grid-container">
             {posts.map((post) => (
                 <li key={post._id} className="relative min-w-80 h-80">
-                    <div className="grid-post_link">
+                    <Link to={`/post/${post._id}`} className="grid-post_link">
                         <img src={post.imgUrl} alt="post" className="h-full w-full object-cover" />
-                    </div>
+                    </Link>
 
                     <div className="grid-post_user">
                         {showUser && (
@@ -37,7 +38,9 @@ const GridPostList = ({ posts, showUser = true, showStats = true }: GridPostList
                                 <p className="line-clamp-1">{post.creator.name}</p>
                             </div>
                         )}
-                        {showStats && <PostStats post={post} userId={user._id} />}
+                        {showStats && (
+                            <PostStats post={post} userId={user._id} showComment={false} onRestart={onRestart} />
+                        )}
                     </div>
                 </li>
             ))}

@@ -16,6 +16,21 @@ export type PostCardProps = {
     creator: User;
     likes: string[];
     saveds: string[];
+    comments: string[];
 };
+
+export type Comment = {
+    _id: string;
+    postId: string;
+    content: string;
+    parrent: string;
+    userId: {
+        _is: string;
+        imgUrl: string;
+        name: string;
+    };
+};
+
 export type POSTS = [PostCardProps];
 export type USERS = [User];
+export type COMMENTS = [Comment];

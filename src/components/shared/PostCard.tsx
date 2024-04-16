@@ -6,7 +6,12 @@ import { PostCardProps } from '@/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 
-const PostCard = ({ post }: { post: PostCardProps }) => {
+type PostCard = {
+    post: PostCardProps;
+    onRestart: () => void;
+};
+
+const PostCard = ({ post, onRestart }: PostCard) => {
     const user = useSelector((state: RootState) => state.auth.currentUser);
     const currentUser = user.user;
     if (post._id === '') return <Loader />;
@@ -27,7 +32,7 @@ const PostCard = ({ post }: { post: PostCardProps }) => {
                         <p className="base-medium lg:body-bold text-light-1">{post.creator.name}</p>
                         <div className="flex-center gap-2 text-light-3">
                             <p className="subtle-semibold lg:small-regular ">
-                                {multiFormatDateString(post.cre_at?.toString())}
+                                {multiFormatDateString(post?.cre_at.toString())}
                             </p>
                             <p className="subtle-semibold lg:small-regular">{post.location}</p>
                         </div>
@@ -56,11 +61,13 @@ const PostCard = ({ post }: { post: PostCardProps }) => {
                     </ul>
                 </div>
 
-                <img src={post.imgUrl || icons.profile_placeholder} alt="post image" className="post-card_img" />
+                <Link to={`/post/${post._id}`}>
+                    <img src={post.imgUrl || icons.profile_placeholder} alt="post image" className="post-card_img" />
+                </Link>
             </div>
 
             {/* Passing currentUser.id instead of user.id */}
-            <PostStats post={post} userId={currentUser._id} />
+            <PostStats post={post} userId={currentUser._id} showComment={false} onRestart={onRestart} />
         </div>
     );
 };

@@ -4,6 +4,7 @@ import { SigninForm, SignupForm } from './pages/_auth';
 import { Explore, Home, Profile, AllUsers, Saved } from './pages/root';
 import { Toaster } from '@/components/ui/toaster';
 import CreatePost from './pages/root/CreatePost';
+import PostDetails from './pages/root/PostDetails';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/all-users" element={<AllUsers />} />
                         <Route path="/saved" element={<Saved />} />
+                        <Route path="/post/:_id" element={<PostDetails />} />
                     </Route>
                 </Routes>
 

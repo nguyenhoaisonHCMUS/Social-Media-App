@@ -7,3 +7,4 @@ export { default as PostStats } from './PostStats';
 export { default as UserCard } from './UserCard';
 export { default as FileUpLoader } from './FileUpLoader';
 export { default as GridPostList } from './GridPostList';
+export { default as ListComment } from './ListComment';
