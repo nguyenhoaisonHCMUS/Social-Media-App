@@ -2,7 +2,7 @@ import { Loader, UserCard } from '@/components/shared';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { getAllUser } from '@/service/UserService';
+import { getAllUser } from '@/service/app/UserService';
 import { USERS } from '@/types';
 import { INIT_STATE_USER } from '@/types/initValueType';
 import { toast } from '@/components/ui/use-toast';

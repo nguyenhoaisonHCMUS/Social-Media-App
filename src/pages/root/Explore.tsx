@@ -7,7 +7,7 @@ import { GridPostList, Loader } from '@/components/shared';
 import { icons } from '@/assets/icons';
 import { POSTS } from '@/types';
 import { INIT_STATE_POST } from '@/types/initValueType';
-import { GetPostOfCaption, getAll } from '@/service/PostService';
+import { GetPostOfCaption, getAll } from '@/service/app/PostService';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { toast } from '@/components/ui/use-toast';

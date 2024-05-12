@@ -10,7 +10,7 @@ import { RootState } from '@/redux/store';
 import { useEffect, useState } from 'react';
 import { PostCardProps } from '@/types';
 import { INIT_POST_CARD } from '@/types/initValueType';
-import { GetPostOfID } from '@/service/PostService';
+import { GetPostOfID } from '@/service/app/PostService';
 import { toast } from '@/components/ui/use-toast';
 import { icons } from '@/assets/icons';
 
@@ -31,17 +31,18 @@ const PostDetails = () => {
             return;
         }
         const fetchGetPostByID = async () => {
-            const res = await GetPostOfID(_id, userInfo.accessToken);
-            if (!res && !res.data) {
+            const res = await GetPostOfID(_id);
+            console.log(res);
+            if (!res && res?.status === 200) {
                 toast({ title: 'Failed! There seems to be a network problem' });
                 return;
             }
-            setPost(res.data[0]);
+            setPost(res.data.data[0]);
         };
         setIsLoading(true);
         fetchGetPostByID();
         setIsLoading(false);
-    }, [restart]);
+    }, [_id, restart]);
 
     return (
         <div className="post_details-container">

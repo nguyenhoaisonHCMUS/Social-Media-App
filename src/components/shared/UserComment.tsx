@@ -1,5 +1,5 @@
 import { RootState } from '@/redux/store';
-import { addComment } from '@/service/CommentService';
+import { addComment } from '@/service/app/CommentService';
 import { Comment } from '@/types';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';

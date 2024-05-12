@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { POSTS, User } from '@/types';
 import { useEffect, useState } from 'react';
-import { getUserByIdApi } from '@/service/UserService';
+import { getUserByIdApi } from '@/service/app/UserService';
 import { icons } from '@/assets/icons';
 import { toast } from '@/components/ui/use-toast';
-import { countPostOfNumberApi } from '@/service/PostService';
+import { countPostOfNumberApi } from '@/service/app/PostService';
 import GridPostList from '@/components/shared/GridPostList';
 import { INIT_USER, INIT_STATE_POST } from '@/types/initValueType';
 

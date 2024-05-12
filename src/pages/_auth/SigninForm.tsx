@@ -9,10 +9,10 @@ import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/shared';
 import { signinValid } from '@/lib/validation';
 import imgs from '@/assets/images';
-import { loginApi } from '@/service/UserService';
 import { toast } from '@/components/ui/use-toast';
 import { loginSuccess, loginFailed } from '@/redux/AuthSlice';
 import { useDispatch } from 'react-redux';
+import { loginApi } from '@/service/auth';
 
 function SigninForm() {
     const isLoading = false;

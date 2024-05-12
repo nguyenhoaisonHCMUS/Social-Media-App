@@ -1,5 +1,5 @@
 import { RootState } from '@/redux/store';
-import { addComment, getCommetByIDPost } from '@/service/CommentService';
+import { addComment, getCommetByIDPost } from '@/service/app/CommentService';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from './Loader';

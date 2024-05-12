@@ -3,7 +3,7 @@ import { PostCardProps } from '@/types';
 import { icons } from '@/assets/icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { createPost } from '@/service/PostService';
+import { createPost } from '@/service/app/PostService';
 import { toast } from '../ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 

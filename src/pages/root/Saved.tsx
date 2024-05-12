@@ -4,7 +4,7 @@ import { icons } from '@/assets/icons';
 import { GridPostList, Loader } from '@/components/shared';
 import { RootState } from '@/redux/store';
 import { POSTS, PostCardProps } from '@/types';
-import { getAll } from '@/service/PostService';
+import { getAll } from '@/service/app/PostService';
 
 const Saved = () => {
     const userInfo = useSelector((state: RootState) => state.auth.currentUser);

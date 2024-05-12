@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 // import { checkIsLiked } from '@/lib/utils';
 import { icons } from '@/assets/icons';
 import { PostCardProps } from '@/types';
-import { likePost, savePost, unLikePost, unSavePost } from '@/service/UserService';
+import { likePost, savePost, unLikePost, unSavePost } from '@/service/app/UserService';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { toast } from '../ui/use-toast';

@@ -10,8 +10,9 @@ import { Loader } from '@/components/shared';
 // import { useToast } from '@/components/ui/use-toast';
 import { signupValid } from '@/lib/validation';
 import imgs from '@/assets/images';
-import { registerApi } from '@/service/UserService';
+
 import { toast } from '@/components/ui/use-toast';
+import { registerApi } from '@/service/auth';
 
 function SignupForm() {
     const isLoading = false;
@@ -27,12 +28,8 @@ function SignupForm() {
         },
     });
     const onSubmit = async (values: z.infer<typeof signupValid>) => {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values);
         try {
             const res = await registerApi(values.name, values.username, values.email, values.password);
-            console.log('res', res);
             if (res.userData.errCode !== 0) {
                 toast({ title: 'Register failed. ' + res.userData.message });
                 return;
