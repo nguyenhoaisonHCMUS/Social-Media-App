@@ -3,29 +3,29 @@ import { useSelector } from 'react-redux';
 import { icons } from '@/assets/icons';
 import { GridPostList, Loader } from '@/components/shared';
 import { RootState } from '@/redux/store';
-import { POSTS, PostCardProps } from '@/types';
+import { PostCardProps } from '@/types';
 import { getAll } from '@/service/app/PostService';
 
 const Saved = () => {
     const userInfo = useSelector((state: RootState) => state.auth.currentUser);
     const currentUser = userInfo.user;
 
-    const [savedPosts, setSavedPosts] = useState<POSTS[]>([]);
+    const [savedPosts, setSavedPosts] = useState<PostCardProps[]>([]);
 
     useEffect(() => {
         const fetchApi = async () => {
-            const data = await getAll(userInfo.accessToken);
-            if (!data.data) {
+            const res = await getAll();
+            if (!res.data) {
                 return (
                     <>
                         <Loader />
                     </>
                 );
             }
-            setSavedPosts(data.data.filter((post: PostCardProps) => post.saveds.includes(currentUser._id)));
+            setSavedPosts(res.data.data.filter((post: PostCardProps) => post.saveds.includes(currentUser._id)));
         };
         fetchApi();
-    }, [userInfo.accessToken]);
+    }, [currentUser._id]);
 
     return (
         <div className="saved-container">

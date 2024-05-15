@@ -8,4 +8,5 @@ export type ErrorResponse = {
     error: string;
     message: string;
 };
-export type ApiResponse<T> = SuccessResponse<T> & ErrorResponse;
+
+export type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;

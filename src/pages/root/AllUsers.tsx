@@ -1,26 +1,21 @@
 import { Loader, UserCard } from '@/components/shared';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
 import { getAllUser } from '@/service/app/UserService';
 import { USERS } from '@/types';
 import { INIT_STATE_USER } from '@/types/initValueType';
 import { toast } from '@/components/ui/use-toast';
 
 const AllUsers = () => {
-    const userInfo = useSelector((state: RootState) => state.auth.currentUser);
-    const [isErrorCreators, setIsErrorCreators] = useState(true);
     const [creators, setCreators] = useState<USERS>(INIT_STATE_USER);
 
     useEffect(() => {
         const fetchGetAllUser = async () => {
-            const res = await getAllUser(userInfo.accessToken);
+            const res = await getAllUser();
             console.log(res.data.dataUser);
             if (!res || !res.data) {
                 toast({ title: 'Not get data' });
                 return;
             }
-            setIsErrorCreators(false);
             setCreators(res.data.dataUser);
         };
         fetchGetAllUser();

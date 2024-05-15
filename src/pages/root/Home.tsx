@@ -1,11 +1,11 @@
 import { Loader, PostCard, UserCard } from '@/components/shared';
-import { POSTS, User } from '../../types/index';
+import { PostCardProps, User } from '../../types/index';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { INIT_STATE_POST } from '@/types/initValueType';
 import { getAll } from '@/service/app/PostService';
-import { checkTokenExpiration } from '@/service/auth';
+
+// import { checkTokenExpiration } from '@/service/auth';
 
 const creators: User[] = [
     {
@@ -39,9 +39,9 @@ const creators: User[] = [
 ];
 
 function Home() {
-    console.log(checkTokenExpiration());
     const [isPostLoading, setIsPostLoading] = useState(true);
-    const [posts, setPosts] = useState<POSTS>(INIT_STATE_POST);
+    const [posts, setPosts] = useState<PostCardProps[]>([]);
+    console.log(posts);
     const isUserLoading = false;
     const user = useSelector((state: RootState) => state.auth.currentUser);
     const [restart, setRestart] = useState(false);
@@ -52,15 +52,13 @@ function Home() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const data = await getAll();
-            if (!data) {
-                return (
-                    <>
-                        <Loader />
-                    </>
-                );
+            const res = await getAll();
+            // console.log(res);
+            if (res.status === 200 && res.data) {
+                setPosts(res.data.data);
+            } else {
+                setPosts([]);
             }
-            setPosts(data.data);
         };
         setIsPostLoading(true);
         fetchApi();
@@ -76,7 +74,7 @@ function Home() {
                         <Loader />
                     ) : (
                         <ul className="flex flex-col flex-1 gap-9 w-full ">
-                            {posts &&
+                            {posts.length > 0 &&
                                 posts.map((post, index) => (
                                     <li key={index} className="flex justify-center w-full">
                                         <PostCard post={post} onRestart={onRestart} />

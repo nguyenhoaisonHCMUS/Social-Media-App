@@ -1,4 +1,5 @@
 import { instance } from '.';
+import { ApiResponse } from '..';
 
 export const getCommetByIDPost = async (postId: string) => {
     try {

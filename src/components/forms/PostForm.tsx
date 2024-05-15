@@ -66,7 +66,7 @@ const PostForm: React.FC<PostFormProps> = ({ action }) => {
 
         // console.log(formData);
 
-        const res = await createPost(formData, user.accessToken);
+        const res = await createPost(formData);
         if (!res) {
             toast({ title: 'create Post FAILED!!' });
             return;
@@ -76,7 +76,7 @@ const PostForm: React.FC<PostFormProps> = ({ action }) => {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-9 w-full  max-w-5xl relative">
-            <label htmlFor="caption" className="shad-form_label">
+            <label htmlFor="caption" className="shad-form_label text-xl">
                 Caption
             </label>
             <input
@@ -88,7 +88,7 @@ const PostForm: React.FC<PostFormProps> = ({ action }) => {
                 onChange={(e) => setCaption(e.target.value)}
             />
 
-            <label htmlFor="location" className="shad-form_label">
+            <label htmlFor="location" className="shad-form_label text-xl">
                 Location
             </label>
             <input
@@ -100,10 +100,10 @@ const PostForm: React.FC<PostFormProps> = ({ action }) => {
                 onChange={(e) => setLocation(e.target.value)}
             />
 
-            <label htmlFor="tags" className="shad-form_label">
+            <label htmlFor="tags" className="shad-form_label text-xl">
                 Tags
+                <p className=" text-sm text-white">Each tag is separated by a comma</p>
             </label>
-            <p className=" text-sm text-white">Each tag is separated by a comma</p>
             <input
                 type="text"
                 id="tags"
@@ -113,34 +113,32 @@ const PostForm: React.FC<PostFormProps> = ({ action }) => {
                 onChange={(e) => setTags(e.target.value)}
             />
 
-            <label htmlFor="image" className="shad-form_label">
+            <label htmlFor="image" className="shad-form_label text-xl">
                 Choose an image
-            </label>
+                {previewImage ? (
+                    <>
+                        <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
+                            <img src={previewImage} alt="image" className="file_uploader-img" />
+                        </div>
+                        <p className="file_uploader-label">Click or drag photo to replace</p>
+                    </>
+                ) : (
+                    <div className="file_uploader-box ">
+                        <img src={icons.file_upload} width={96} height={77} alt="file upload" />
 
+                        <h3 className="base-medium text-light-2 mb-2 mt-6">Drag photo here</h3>
+                        <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG</p>
+                    </div>
+                )}
+            </label>
             <input
                 type="file"
                 id="image"
                 name="image_post"
-                className=" flex items-center justify-center h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 shad-input"
+                className=" hidden flex items-center justify-center h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 shad-input"
                 accept="image/*"
                 onChange={handleImageChange}
             />
-
-            {previewImage ? (
-                <>
-                    <div className="flex flex-1 justify-center w-full p-5 lg:p-10">
-                        <img src={previewImage} alt="image" className="file_uploader-img" />
-                    </div>
-                    <p className="file_uploader-label">Click or drag photo to replace</p>
-                </>
-            ) : (
-                <div className="file_uploader-box ">
-                    <img src={icons.file_upload} width={96} height={77} alt="file upload" />
-
-                    <h3 className="base-medium text-light-2 mb-2 mt-6">Drag photo here</h3>
-                    <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG</p>
-                </div>
-            )}
 
             <input
                 type="submit"

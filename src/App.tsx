@@ -5,6 +5,7 @@ import { Explore, Home, Profile, AllUsers, Saved } from './pages/root';
 import { Toaster } from '@/components/ui/toaster';
 import CreatePost from './pages/root/CreatePost';
 import PostDetails from './pages/root/PostDetails';
+import UpdateProfile from './pages/root/profiles/UpdateProfile';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                         <Route path="/" element={<Home />} />
                         <Route path="/create-post" element={<CreatePost />} />
                         <Route path="/profile/:_id" element={<Profile />} />
+                        <Route path="/profile/:_id/update" element={<UpdateProfile />} />
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/all-users" element={<AllUsers />} />
                         <Route path="/saved" element={<Saved />} />

@@ -1,20 +1,34 @@
+import { PostCardProps } from '@/types';
 import { instance } from '.';
+import { ApiResponse } from '..';
+
+type getAllType = {
+    data: PostCardProps[];
+};
 
 export const getAll = async () => {
     try {
-        const response = await instance.get('/posts');
-        return response.data;
+        const response: ApiResponse<getAllType> = await instance.get('/posts');
+        if ('data' in response && response.data) {
+            return response;
+        } else {
+            throw new Error('GetAll faild!');
+        }
     } catch (error) {
-        return { message: 'failed' };
+        throw new Error(`GetAll faild! ${error}`);
     }
 };
 
 export const createPost = async (data: FormData) => {
     try {
-        const response = await instance.post('/create-post', data);
-        return response;
+        const response: ApiResponse<PostCardProps> = await instance.post('/create-post', data);
+        if ('data' in response && response.data) {
+            return response;
+        } else {
+            throw new Error('GetAll faild!');
+        }
     } catch (error) {
-        return { message: error };
+        throw new Error(`GetAll faild! ${error}`);
     }
 };
 

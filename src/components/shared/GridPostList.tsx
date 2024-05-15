@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 
 import { Loader, PostStats } from '@/components/shared';
-import { POSTS } from '@/types';
+import { PostCardProps } from '@/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { icons } from '@/assets/icons';
 
 type GridPostListProps = {
-    posts: POSTS;
+    posts: PostCardProps[];
     showUser?: boolean;
     showStats?: boolean;
     onRestart?: () => void;

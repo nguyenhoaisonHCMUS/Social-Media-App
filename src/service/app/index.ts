@@ -2,6 +2,7 @@ import { loginSuccess, logout } from '@/redux/AuthSlice';
 import { store } from '@/redux/store';
 import axios, { AxiosInstance } from 'axios';
 import { refreshToken } from '../auth';
+import { ErrorResponse } from '..';
 
 export const instance: AxiosInstance = axios.create({
     baseURL: 'http://localhost:5000/api',
@@ -25,7 +26,7 @@ instance.interceptors.request.use(
 let isRefreshing = false;
 
 // Mảng lưu trữ các request pending trong quá trình refresh token
-let pendingRequests = [];
+let pendingRequests: (() => void)[] = [];
 
 // Tạo một interceptor để xử lý việc refresh token khi accessToken hết hạn
 instance.interceptors.response.use(
@@ -34,10 +35,9 @@ instance.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
-        console.log('resfresh Token');
+        const response = error.response;
 
         if (error.response.status === 403 && !originalRequest._retry) {
-            console.log('401');
             if (isRefreshing) {
                 // Nếu đang trong quá trình refresh token, đợi cho đến khi token mới được nhận và thử lại yêu cầu ban đầu
                 return new Promise(function (resolve) {
@@ -52,14 +52,15 @@ instance.interceptors.response.use(
 
             try {
                 const res = await refreshToken();
-                console.log('res refreshToken: ', res);
                 isRefreshing = false;
                 // Lưu trữ accessToken mới
                 const user = store.getState().auth.currentUser.user;
-                // loginSuccess({
-                //     ...user,
-                //     accessToken: res.message,
-                // });
+                store.dispatch(
+                    loginSuccess({
+                        user,
+                        accessToken: res.data?.accessToken,
+                    }),
+                );
 
                 // Thực hiện lại các request đang chờ
                 pendingRequests.forEach((callback) => callback());
@@ -67,14 +68,17 @@ instance.interceptors.response.use(
                 return instance(originalRequest);
             } catch (refreshError) {
                 console.error('Error refreshing token:', refreshError);
-                logout();
-                // Đăng xuất người dùng hoặc xử lý lỗi khác tùy thuộc vào yêu cầu cụ thể của ứng dụng
-                // Ví dụ: clear localStorage và redirect người dùng đến trang đăng nhập
-                // clearLocalStorageAndRedirectToLogin();
+                store.dispatch(logout());
                 return Promise.reject(refreshError);
             }
         }
 
-        return Promise.reject(error);
+        const error_response: ErrorResponse = {
+            status: response.status,
+            error: response.data.error,
+            message: response.data.message,
+        };
+
+        return Promise.reject(error_response);
     },
 );

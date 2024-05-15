@@ -96,7 +96,7 @@ const Profile = () => {
                     <div className="flex justify-center gap-4">
                         <div className={`${user._id !== currentUser._id && 'hidden'}`}>
                             <Link
-                                to={`/update-profile/${currentUser._id}`}
+                                to={`/profile/${currentUser._id}/update`}
                                 className={`h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-lg ${
                                     user._id !== currentUser._id && 'hidden'
                                 }`}
