@@ -41,7 +41,7 @@ const PostCard = ({ post, onRestart }: PostCard) => {
 
                 {/* Conditional rendering for edit link */}
                 {currentUser._id === post.creator._id && (
-                    <Link to={`/update-post/${post._id}`}>
+                    <Link to={`/post/${post._id}/update`}>
                         <img src={icons.edited} alt="edit" width={20} height={20} />
                     </Link>
                 )}
@@ -67,7 +67,7 @@ const PostCard = ({ post, onRestart }: PostCard) => {
             </div>
 
             {/* Passing currentUser.id instead of user.id */}
-            <PostStats post={post} userId={currentUser._id} showComment={false} onRestart={onRestart} />
+            {post && <PostStats post={post} userId={currentUser._id} showComment={false} onRestart={onRestart} />}
         </div>
     );
 };

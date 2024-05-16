@@ -41,7 +41,6 @@ const creators: User[] = [
 function Home() {
     const [isPostLoading, setIsPostLoading] = useState(true);
     const [posts, setPosts] = useState<PostCardProps[]>([]);
-    console.log(posts);
     const isUserLoading = false;
     const user = useSelector((state: RootState) => state.auth.currentUser);
     const [restart, setRestart] = useState(false);
@@ -53,7 +52,6 @@ function Home() {
     useEffect(() => {
         const fetchApi = async () => {
             const res = await getAll();
-            // console.log(res);
             if (res.status === 200 && res.data) {
                 setPosts(res.data.data);
             } else {

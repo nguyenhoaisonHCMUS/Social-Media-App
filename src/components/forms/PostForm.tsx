@@ -3,9 +3,9 @@ import { PostCardProps } from '@/types';
 import { icons } from '@/assets/icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { createPost } from '@/service/app/PostService';
+import { createPost, updatePost } from '@/service/app/PostService';
 import { toast } from '../ui/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 type PostFormProps = {
     post?: PostCardProps;
@@ -15,14 +15,15 @@ interface CustomFile extends File {
     fieldname?: string;
 }
 
-const PostForm: React.FC<PostFormProps> = ({ action }) => {
+const PostForm: React.FC<PostFormProps> = ({ action, post }) => {
     const user = useSelector((state: RootState) => state.auth.currentUser);
+    // console.log('post: ', post);
 
-    const [caption, setCaption] = useState('');
-    const [location, setLocation] = useState('');
-    const [tags, setTags] = useState('');
+    const [caption, setCaption] = useState<string>(post?.caption || '');
+    const [location, setLocation] = useState<string>(post?.location || '');
+    const [tags, setTags] = useState<string>(post?.tags || '');
     const [image, setImage] = useState<File | ''>('');
-    const [previewImage, setPreviewImage] = useState('');
+    const [previewImage, setPreviewImage] = useState<string>('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,28 +51,49 @@ const PostForm: React.FC<PostFormProps> = ({ action }) => {
     };
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-        if (!location || !tags || !caption || !image) {
+        if (action === 'Create') {
+            if (!location || !tags || !caption || !image) {
+                event.preventDefault();
+                toast({ title: 'Please fill in all information!!' });
+                return;
+            }
             event.preventDefault();
-            toast({ title: 'Please fill in all information!!' });
-            return;
-        }
-        event.preventDefault();
-        // const tagsArray = tags.split(',');
-        const formData = new FormData();
-        formData.append('caption', caption);
-        formData.append('location', location);
-        formData.append('tags', tags);
-        formData.append('creator', user.user._id);
-        formData.append('image_post', image);
+            // const tagsArray = tags.split(',');
+            const formData = new FormData();
+            formData.append('caption', caption);
+            formData.append('location', location);
+            formData.append('tags', tags);
+            formData.append('creator', user.user._id);
+            formData.append('image_post', image);
 
-        // console.log(formData);
+            // console.log(formData);
 
-        const res = await createPost(formData);
-        if (!res) {
-            toast({ title: 'create Post FAILED!!' });
-            return;
+            const res = await createPost(formData);
+            if (!res) {
+                toast({ title: 'create Post FAILED!!' });
+                return;
+            }
+            navigate('/');
+        } else if (action === 'Update') {
+            event.preventDefault();
+
+            const res = await updatePost({
+                data: {
+                    location,
+                    caption,
+                    tags,
+                    image_post: image as File,
+                },
+                _id: post?._id as string,
+            });
+            console.log('update post res: ', res);
+            if (res.status === 200) {
+                toast({ title: 'Update post successfull' });
+                navigate(`/post/${post?._id}`);
+            } else {
+                toast({ title: 'Update post failed' });
+            }
         }
-        navigate('/');
     };
 
     return (
@@ -135,16 +157,26 @@ const PostForm: React.FC<PostFormProps> = ({ action }) => {
                 type="file"
                 id="image"
                 name="image_post"
-                className=" hidden flex items-center justify-center h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 shad-input"
+                className=" hidden items-center justify-center h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 shad-input"
                 accept="image/*"
                 onChange={handleImageChange}
             />
 
-            <input
-                type="submit"
-                value={action === 'Create' ? 'Upload' : 'Update'}
-                className=" hover:opacity-90 cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shad-button_primary"
-            />
+            <div className=" flex items-center justify-end gap-3 flex-1">
+                {action === 'Update' && (
+                    <Link
+                        className=" min-w-[240px] hover:opacity-90 cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shad-button_primary"
+                        to={`/`}
+                    >
+                        Cancel
+                    </Link>
+                )}
+                <input
+                    type="submit"
+                    value={action === 'Create' ? 'Upload' : 'Update'}
+                    className=" min-w-[240px] hover:opacity-90 cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shad-button_primary"
+                />
+            </div>
         </form>
     );
 };

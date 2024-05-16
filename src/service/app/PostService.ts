@@ -1,4 +1,4 @@
-import { PostCardProps } from '@/types';
+import { PostCardProps, PostType } from '@/types';
 import { instance } from '.';
 import { ApiResponse } from '..';
 
@@ -34,7 +34,7 @@ export const createPost = async (data: FormData) => {
 
 export const countPostOfNumberApi = async (creator: string) => {
     try {
-        const response = await instance.get('http://localhost:5000/api/post-number-of-user', {
+        const response = await instance.get('/post-number-of-user', {
             params: {
                 creator: creator,
             },
@@ -52,21 +52,56 @@ export const GetPostOfCaption = async (caption: string) => {
                 caption,
             },
         });
-        return response.data;
+        if ('data' in response && response.data) {
+            return response;
+        } else {
+            throw new Error('GetAll faild!');
+        }
     } catch (error) {
         return { message: error };
     }
 };
 
+type GetPostOfIDType = {
+    data: PostCardProps[];
+    message: string;
+};
+
 export const GetPostOfID = async (postId: string) => {
     try {
-        const response = await instance.get('http://localhost:5000/api/search-post-id', {
+        const response: ApiResponse<GetPostOfIDType> = await instance.get('/search-post-id', {
             params: {
                 postId,
             },
         });
-        return response;
+        if ('data' in response && response.data) {
+            return response;
+        } else {
+            throw new Error('GetAll faild!');
+        }
     } catch (error) {
-        return { message: error };
+        throw new Error(`Get post by ID faild! ${error}`);
+    }
+};
+type updadtePostType = {
+    data: {
+        location?: string;
+        tags?: string;
+        caption?: string;
+        image_post?: File;
+    };
+    _id: string;
+};
+
+export const updatePost = async (data: updadtePostType) => {
+    try {
+        const response: ApiResponse<PostType> = await instance.patch(`/post/${data._id}`, data.data);
+        if ('data' in response && response.data) {
+            return response;
+        } else {
+            throw new Error('GetAll faild!');
+        }
+    } catch (error) {
+        throw new Error(`Get post by ID faild! ${error}`);
     }
 };

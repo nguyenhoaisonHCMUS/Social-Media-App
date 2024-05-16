@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from '../ui/use-toast';
 import Loader from './Loader';
+import { icons } from '@/assets/icons';
+import { User } from 'lucide-react';
 
 type CommentProp = {
     comment: Comment;
@@ -66,7 +68,7 @@ function UserComment({ comment, postId }: CommentProp) {
                         <div className="flex items-center gap-4 w-full">
                             <img
                                 className="w-9 h-9 lg:w-12 lg:h-12 rounded-full"
-                                src={userInfo.user.imgUrl}
+                                src={userInfo.user.imgUrl || icons.people}
                                 alt="avatar"
                             />
                             <input

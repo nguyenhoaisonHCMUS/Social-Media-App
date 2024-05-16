@@ -10,6 +10,7 @@ import { RootState } from '@/redux/store';
 import { toast } from '../ui/use-toast';
 import { MessageCircle } from 'lucide-react';
 import ListComment from './ListComment';
+import Loader from './Loader';
 
 type PostStatsProps = {
     post: PostCardProps;
@@ -20,8 +21,8 @@ type PostStatsProps = {
 
 const PostStats = ({ post, userId, showComment = false, onRestart }: PostStatsProps) => {
     const location = useLocation();
-    const [likes, setLikes] = useState<string[]>(post.likes);
-    const [comments, setComments] = useState<string[]>(post.comments);
+    const [likes, setLikes] = useState<string[]>(post?.likes);
+    const [comments, setComments] = useState<string[]>(post?.comments);
 
     const [isSaved, setIsSaved] = useState(false);
 
@@ -36,7 +37,7 @@ const PostStats = ({ post, userId, showComment = false, onRestart }: PostStatsPr
                 setIsSaved(false);
             }
         }
-    }, [post.saveds]);
+    }, [post.saveds, post._id, userId]);
 
     useEffect(() => {
         setLikes(post.likes);
@@ -108,39 +109,47 @@ const PostStats = ({ post, userId, showComment = false, onRestart }: PostStatsPr
 
     return (
         <div>
-            <div className={`flex justify-between items-center z-20 ${containerStyles}`}>
-                <div className="flex gap-5 mr-5">
-                    <div className="flex items-center gap-2">
-                        <img
-                            src={likes.includes(userId) ? icons.liked : icons.like}
-                            alt="like"
-                            width={20}
-                            height={20}
-                            onClick={() => handleLikePost()}
-                            className="cursor-pointer"
-                        />
-                        <p className="small-medium lg:base-medium">{likes.length}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <MessageCircle className="w-[20px] h-[20px] text-blue-600" />
-                        <p className="small-medium lg:base-medium">{comments.length}</p>
-                    </div>
+            {!post ? (
+                <div className="">
+                    <Loader />
                 </div>
+            ) : (
+                <div>
+                    <div className={`flex justify-between items-center z-20 ${containerStyles}`}>
+                        <div className="flex gap-5 mr-5">
+                            <div className="flex items-center gap-2">
+                                <img
+                                    src={likes.includes(userId) ? icons.liked : icons.like}
+                                    alt="like"
+                                    width={20}
+                                    height={20}
+                                    onClick={() => handleLikePost()}
+                                    className="cursor-pointer"
+                                />
+                                <p className="small-medium lg:base-medium">{likes.length}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <MessageCircle className="w-[20px] h-[20px] text-blue-600" />
+                                <p className="small-medium lg:base-medium">{comments.length}</p>
+                            </div>
+                        </div>
 
-                <div className="flex gap-2">
-                    <img
-                        src={isSaved ? icons.saved : icons.save}
-                        alt="share"
-                        width={20}
-                        height={20}
-                        className="cursor-pointer"
-                        onClick={() => handleSavePost()}
-                    />
-                </div>
-            </div>
-            {showComment && (
-                <div className=" mt-5 w-full">
-                    <ListComment postId={post._id} onRestart={onRestart} />
+                        <div className="flex gap-2">
+                            <img
+                                src={isSaved ? icons.saved : icons.save}
+                                alt="share"
+                                width={20}
+                                height={20}
+                                className="cursor-pointer"
+                                onClick={() => handleSavePost()}
+                            />
+                        </div>
+                    </div>
+                    {showComment && (
+                        <div className=" mt-5 w-full">
+                            <ListComment postId={post._id} onRestart={onRestart} />
+                        </div>
+                    )}
                 </div>
             )}
         </div>

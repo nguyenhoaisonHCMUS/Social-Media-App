@@ -6,6 +6,14 @@ export type User = {
     imgUrl: string;
 };
 
+export type PostType = {
+    tags: string;
+    imgUrl: string;
+    cre_at: Date;
+    caption: string;
+    location: string;
+};
+
 export type PostCardProps = {
     _id: string;
     caption: string;

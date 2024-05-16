@@ -7,6 +7,7 @@ import { COMMENTS } from '@/types';
 import { INIT_STATE_COMMENT } from '@/types/initValueType';
 import { toast } from '../ui/use-toast';
 import UserComment from './UserComment';
+import { icons } from '@/assets/icons';
 type ListComments = {
     postId: string;
     onRestart: () => void;
@@ -81,7 +82,11 @@ function ListComment({ postId, onRestart }: ListComments) {
                 </div>
             )}
             <div className="flex items-center gap-4 mt-9 w-full">
-                <img className="w-9 h-9 lg:w-12 lg:h-12 rounded-full" src={userInfo.user.imgUrl} alt="avatar" />
+                <img
+                    className="w-9 h-9 lg:w-12 lg:h-12 rounded-full"
+                    src={userInfo.user.imgUrl || icons.profile_placeholder}
+                    alt="avatar"
+                />
                 <input
                     placeholder="Enter your comment..."
                     value={userComment}
