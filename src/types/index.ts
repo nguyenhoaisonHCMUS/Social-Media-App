@@ -42,3 +42,16 @@ export type Comment = {
 export type POSTS = [PostCardProps];
 export type USERS = [User];
 export type COMMENTS = [Comment];
+
+//userService
+export type updatedUserType = {
+    file?: File;
+    name?: string;
+    email?: string;
+    password?: string;
+    username?: string;
+};
+
+export type LogoutType = {
+    message: string;
+};

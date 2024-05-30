@@ -7,6 +7,8 @@ import { icons } from '@/assets/icons';
 import { User } from '@/types';
 import { useDispatch } from 'react-redux';
 import { logout } from '@/redux/AuthSlice';
+import { logoutApi } from '@/service/app/UserService';
+import { toast } from '../ui/use-toast';
 
 function LeftSidebar({ userData }: { userData: User }) {
     const isLoading = false;
@@ -15,9 +17,16 @@ function LeftSidebar({ userData }: { userData: User }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate('/sign-in');
+    const handleLogout = async () => {
+        const res = await logoutApi();
+        console.log(res);
+        if (res?.status === 200) {
+            dispatch(logout());
+            navigate('/sign-in');
+            toast({ title: res.data?.message });
+        } else {
+            toast({ title: 'logout failed!!' });
+        }
     };
 
     return (

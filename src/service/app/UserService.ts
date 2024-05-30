@@ -1,15 +1,21 @@
+import { LogoutType, User, updatedUserType } from '@/types';
 import { instance } from '.';
+import { ApiResponse } from '..';
 
 export const getUserByIdApi = async (userId: string) => {
     try {
-        const response = await instance.get('/get-user-id', {
+        const response: ApiResponse<User> = await instance.get('/get-user-id', {
             params: {
                 userId: userId,
             },
         });
-        return response.data;
+        if ('data' in response && response.data) {
+            return response;
+        } else {
+            throw new Error('get User by Id failed');
+        }
     } catch (error) {
-        return { error };
+        throw new Error('get User by Id failed:' + error);
     }
 };
 
@@ -56,4 +62,32 @@ export const unSavePost = async (userId: string, postId: string) => {
     } catch (error) {
         return { error };
     }
+};
+
+export type updateUserReqType = {
+    data: updatedUserType;
+    _id: number;
+};
+export const updateProfile = async (data: updateUserReqType) => {
+    try {
+        const response: ApiResponse<User> = await instance.patch(`/user/${data._id}`, data.data);
+        if ('data' in response && response.data) {
+            return response;
+        } else {
+            throw new Error('update profile failed!!');
+        }
+    } catch (error) {
+        throw new Error('update profile failed!!: ' + error);
+    }
+};
+
+export const logoutApi = async () => {
+    try {
+        const response: ApiResponse<LogoutType> = await instance.post('/logout');
+        if ('data' in response && response.data) {
+            return response;
+        } else {
+            throw new Error('update profile failed!!');
+        }
+    } catch (error) {}
 };

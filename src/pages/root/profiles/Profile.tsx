@@ -34,20 +34,23 @@ const Profile = () => {
 
     useEffect(() => {
         const fetchGetUserApi = async () => {
-            const res = await getUserByIdApi(_id, users.accessToken);
-            if (res && res.data) {
+            const res = await getUserByIdApi(_id as string);
+            if (res.status === 200 && res.data) {
                 setUser(res.data);
             } else {
-                return;
+                toast({ title: 'get user failed' });
             }
         };
         fetchGetUserApi();
     }, [_id, users.accessToken]);
 
     useEffect(() => {
+        if (!user._id) {
+            return;
+        }
         const fetchGetPostNumber = async () => {
             try {
-                const res = await countPostOfNumberApi(user._id, users.accessToken);
+                const res = await countPostOfNumberApi(user._id);
                 if (res && res.data) {
                     setPosts(res.data);
                 } else {
