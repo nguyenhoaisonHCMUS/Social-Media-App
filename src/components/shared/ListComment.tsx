@@ -20,7 +20,7 @@ function ListComment({ postId, onRestart }: ListComments) {
     const [checkComment, setCheckComment] = useState(false);
     // console.log(comments);
 
-    const userInfo = useSelector((state: RootState) => state.auth.currentUser);
+    const userInfo = useSelector((state: RootState) => state.persistedReducer.auth.currentUser);
 
     useEffect(() => {
         if (!postId) {
@@ -28,7 +28,7 @@ function ListComment({ postId, onRestart }: ListComments) {
             return;
         }
         const fetchGetCommentBYPossID = async () => {
-            const res = await getCommetByIDPost(postId, userInfo.accessToken);
+            const res = await getCommetByIDPost(postId);
             // console.log('res', res.data);
             setComments(res.data);
         };
@@ -46,7 +46,7 @@ function ListComment({ postId, onRestart }: ListComments) {
             e.preventDefault();
             try {
                 setIsLoading(true);
-                const res = await addComment(postId, userInfo.user._id, userComment, '', userInfo.accessToken);
+                const res = await addComment(postId, userInfo.user._id, userComment, '');
                 if (!res.data) {
                     toast({ title: 'error with comment, so sorry!!' });
                     return;

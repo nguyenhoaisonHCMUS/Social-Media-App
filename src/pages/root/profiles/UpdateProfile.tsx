@@ -3,7 +3,7 @@ import { toast } from '@/components/ui/use-toast';
 import { RootState } from '@/redux/store';
 import { updateProfile, updateUserReqType } from '@/service/app/UserService';
 import { CircleUserRound } from 'lucide-react';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ interface CustomFile extends File {
 }
 
 function UpdateProfile() {
-    const user = useSelector((state: RootState) => state.auth.currentUser);
+    const user = useSelector((state: RootState) => state.persistedReducer.auth.currentUser);
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');

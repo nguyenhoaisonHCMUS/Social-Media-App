@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { toast } from '../ui/use-toast';
 import Loader from './Loader';
 import { icons } from '@/assets/icons';
-import { User } from 'lucide-react';
 
 type CommentProp = {
     comment: Comment;
@@ -15,11 +14,11 @@ type CommentProp = {
 
 function UserComment({ comment, postId }: CommentProp) {
     const [isRep, setIsRep] = useState(false);
-    const userInfo = useSelector((state: RootState) => state.auth.currentUser);
+    const userInfo = useSelector((state: RootState) => state.persistedReducer.auth.currentUser);
     const [userComment, setUserComment] = useState('');
     const [checkComment, setCheckComment] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [parrent, setParrent] = useState('');
+    const parrent = '';
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserComment(e.target.value);

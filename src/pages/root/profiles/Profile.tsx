@@ -1,4 +1,4 @@
-import { Link, Outlet, useParams, useLocation, Route, Routes } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/shared';
 import { useSelector } from 'react-redux';
@@ -29,7 +29,7 @@ const Profile = () => {
     const { pathname } = useLocation();
     const [user, setUser] = useState<User>(INIT_USER);
     const [posts, setPosts] = useState<POSTS>(INIT_STATE_POST);
-    const users = useSelector((state: RootState) => state.auth.currentUser);
+    const users = useSelector((state: RootState) => state.persistedReducer.auth.currentUser);
     const currentUser = users.user;
 
     useEffect(() => {
@@ -137,7 +137,13 @@ const Profile = () => {
                 </div>
             </div>
 
-            <GridPostList posts={posts} showUser={false} />
+            <GridPostList
+                posts={posts}
+                showUser={false}
+                onRestart={() => {
+                    return;
+                }}
+            />
         </div>
     );
 };

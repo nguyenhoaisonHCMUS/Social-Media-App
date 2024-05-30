@@ -16,7 +16,7 @@ interface CustomFile extends File {
 }
 
 const PostForm: React.FC<PostFormProps> = ({ action, post }) => {
-    const user = useSelector((state: RootState) => state.auth.currentUser);
+    const user = useSelector((state: RootState) => state.persistedReducer.auth.currentUser);
     // console.log('post: ', post);
 
     const [caption, setCaption] = useState<string>(post?.caption || '');

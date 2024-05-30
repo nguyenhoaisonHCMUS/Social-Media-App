@@ -10,7 +10,7 @@ type GridPostListProps = {
     posts: PostCardProps[];
     showUser?: boolean;
     showStats?: boolean;
-    onRestart?: () => void;
+    onRestart: () => void;
 };
 
 const GridPostList = ({ posts, showUser = true, showStats = true, onRestart }: GridPostListProps) => {

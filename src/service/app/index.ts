@@ -54,7 +54,7 @@ instance.interceptors.response.use(
                 const res = await refreshToken();
                 isRefreshing = false;
                 // Lưu trữ accessToken mới
-                const user = store.getState().auth.currentUser.user;
+                const user = store.getState().persistedReducer.auth.currentUser.user;
                 store.dispatch(
                     loginSuccess({
                         user,

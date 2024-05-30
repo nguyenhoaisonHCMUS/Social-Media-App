@@ -47,7 +47,7 @@ export const countPostOfNumberApi = async (creator: string) => {
 
 export const GetPostOfCaption = async (caption: string) => {
     try {
-        const response = await instance.get('http://localhost:5000/api/search-post', {
+        const response = await instance.get('/search-post', {
             params: {
                 caption,
             },
