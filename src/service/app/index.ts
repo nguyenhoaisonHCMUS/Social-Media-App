@@ -10,7 +10,7 @@ export const instance: AxiosInstance = axios.create({
 
 instance.interceptors.request.use(
     function (config) {
-        const accessToken = store.getState().auth.currentUser?.accessToken;
+        const accessToken = store.getState().persistedReducer.auth.currentUser?.accessToken;
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }

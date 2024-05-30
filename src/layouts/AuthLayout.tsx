@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Outlet, Navigate } from 'react-router-dom';
 
 function AuthLayout() {
-    const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector((state: RootState) => state.persistedReducer.auth.isLoggedIn);
     const xxx = false;
     return (
         <>

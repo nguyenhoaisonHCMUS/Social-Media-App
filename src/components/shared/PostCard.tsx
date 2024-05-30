@@ -12,7 +12,7 @@ type PostCard = {
 };
 
 const PostCard = ({ post, onRestart }: PostCard) => {
-    const user = useSelector((state: RootState) => state.auth.currentUser);
+    const user = useSelector((state: RootState) => state.persistedReducer.auth.currentUser);
     const currentUser = user.user;
     if (post._id === '') return <Loader />;
 

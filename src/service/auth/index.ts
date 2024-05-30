@@ -44,32 +44,3 @@ export const refreshToken = async () => {
         throw new Error('Failed to refresh token');
     }
 };
-
-// export const checkTokenExpiration = () => {
-//     const accessToken = store.getState().auth.currentUser.accessToken;
-//     if (!accessToken) {
-//         // Chưa có accessToken, cần đăng nhập lại
-//         return false;
-//     }
-
-//     try {
-//         const decodedToken: JwtPayload = jwtDecode(accessToken);
-//         // console.log('decodeToken: ', decodedToken);
-//         const currentTime = Math.floor(Date.now() / 1000); // Thời gian hiện tại (đã chuyển sang giây)
-
-//         if (decodedToken) {
-//             return false;
-//         }
-//         if (decodedToken.exp < currentTime) {
-//             // AccessToken đã hết hạn
-//             return true;
-//         } else {
-//             // AccessToken vẫn còn hiệu lực
-//             return false;
-//         }
-//     } catch (error) {
-//         console.error('Error decoding token:', error);
-//         logout();
-//         return false;
-//     }
-// };

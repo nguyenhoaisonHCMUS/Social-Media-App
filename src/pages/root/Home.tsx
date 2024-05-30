@@ -42,7 +42,7 @@ function Home() {
     const [isPostLoading, setIsPostLoading] = useState(true);
     const [posts, setPosts] = useState<PostCardProps[]>([]);
     const isUserLoading = false;
-    const user = useSelector((state: RootState) => state.auth.currentUser);
+    const user = useSelector((state: RootState) => state.persistedReducer.auth.currentUser);
     const [restart, setRestart] = useState(false);
 
     const onRestart = () => {

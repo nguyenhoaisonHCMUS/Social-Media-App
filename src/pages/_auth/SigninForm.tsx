@@ -29,7 +29,6 @@ function SigninForm() {
     const onSubmit = async (values: z.infer<typeof signinValid>) => {
         try {
             const res = await loginApi(values.email, values.password);
-            console.log('res Login: ', res);
             if (!res.user) {
                 dispatch(loginFailed());
                 toast({ title: 'login failed ' + res.message });

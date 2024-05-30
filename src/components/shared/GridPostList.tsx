@@ -14,7 +14,7 @@ type GridPostListProps = {
 };
 
 const GridPostList = ({ posts, showUser = true, showStats = true, onRestart }: GridPostListProps) => {
-    const user = useSelector((state: RootState) => state.auth.currentUser.user);
+    const user = useSelector((state: RootState) => state.persistedReducer.auth.currentUser.user);
 
     if (!posts) {
         return <Loader />;

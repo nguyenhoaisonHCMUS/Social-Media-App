@@ -47,7 +47,7 @@ const PostStats = ({ post, userId, showComment = false, onRestart }: PostStatsPr
         setComments(post.comments);
     }, [post.comments]);
 
-    const userInfo = useSelector((state: RootState) => state.auth.currentUser);
+    const userInfo = useSelector((state: RootState) => state.persistedReducer.auth.currentUser);
 
     const handleLikePost = async () => {
         try {
